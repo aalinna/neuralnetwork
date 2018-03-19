@@ -8,9 +8,14 @@ import chisel3.util._
 import org.scalatest.{FlatSpec, Matchers}
 
 class NeuralNetworkTester(neuralNetwork: NeuralNetwork) extends PeekPokeTester(neuralNetwork) {
-  poke(neuralNetwork.io.in, 1)
+  poke(neuralNetwork.io.in.valid, 1)
+  poke(neuralNetwork.io.in.bits, 2)
 
-  printf(s"[$t NeuralNetworkTester] neuralnetwork.io.out = ${peek(neuralNetwork.io.out)}\n")
+  while (peek(neuralNetwork.io.out.valid) == BigInt(0)) {
+    step(1)
+  }
+
+  printf(s"[$t NeuralNetworkTester] neuralnetwork.io.out.bits = ${peek(neuralNetwork.io.out.bits)}\n")
 
   step(1)
 }

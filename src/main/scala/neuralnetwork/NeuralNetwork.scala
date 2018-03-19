@@ -6,16 +6,28 @@ import chisel3.util._
 class NeuralNetworkIO extends Bundle {
   val dataWidth = 15
 
-  val in = Input(UInt(dataWidth.W))
-  val out = Output(UInt(dataWidth.W))
+  val in = Flipped(Valid(UInt(dataWidth.W)))
+  val out = Valid(UInt(dataWidth.W))
 }
 
 class NeuralNetwork extends Module with CurrentCycle {
   val io = IO(new NeuralNetworkIO)
 
-  io.out := 1.U
+  io.out.valid := false.B
+  io.out.bits := DontCare
 
-  printf(p"[$currentCycle NeuralNetwork] io.in = ${io.in}\n")
+  when (io.in.valid) {
+    io.out.valid := true.B
+    io.out.bits := 3.U
+  }
+
+  when (io.in.valid) {
+    printf(p"[$currentCycle NeuralNetwork] io.in.bits = ${io.in.bits}\n")
+  }
+
+  when (io.out.valid) {
+    printf(p"[$currentCycle NeuralNetwork] io.out.bits = ${io.out.bits}\n")
+  }
 }
 
 object NeuralNetwork extends App {

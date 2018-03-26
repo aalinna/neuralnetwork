@@ -9,7 +9,7 @@ import org.scalatest.{FlatSpec, Matchers}
 
 class NeuronTester(neuron: Neuron) extends PeekPokeTester(neuron) {
   poke(neuron.io.in.valid, 1)
-  poke(neuron.io.in.bits, 2)
+//  poke(neuron.io.in.bits, 2)
 
   while (peek(neuron.io.out.valid) == BigInt(0)) {
     step(1)
@@ -22,6 +22,6 @@ class NeuronTester(neuron: Neuron) extends PeekPokeTester(neuron) {
 
 class NeuronSpec extends FlatSpec with Matchers {
   it should "run excellently" in {
-    chisel3.iotesters.Driver(() => new Neuron()) { neuron => new NeuronTester(neuron) } should be(true)
+    chisel3.iotesters.Driver(() => new Neuron(5)) { neuron => new NeuronTester(neuron) } should be(true)
   }
 }

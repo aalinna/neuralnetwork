@@ -1,19 +1,23 @@
 package neuralnetwork
 
 import chisel3._
+import chisel3.core.FixedPoint
 import chisel3.util._
 
 class NeuronIO extends Bundle {
-  val in = Flipped(Valid(UInt(Config.dataWidth.W)))
-  val weight = Flipped(Valid(UInt(Config.dataWidth.W)))
+  val in = Flipped(Decoupled(Fixed))
+  val weight = Flipped(Decoupled(Fixed))
 
-  val out = Valid(UInt(Config.dataWidth.W))
+  val out = Decoupled(Fixed)
 }
 
 class Neuron extends Module with CurrentCycle {
   val io = IO(new NeuronIO)
 
-  val sum = RegInit(0.U(Config.dataWidth.W))
+  io.in.ready := false.B
+  io.weight.ready := false.B
+
+  val sum = RegInit(0.Fixed)
 
   when(io.in.valid){
     sum := sum + io.weight.bits * io.in.bits

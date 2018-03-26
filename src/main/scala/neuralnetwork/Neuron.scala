@@ -13,13 +13,13 @@ class NeuronIO extends Bundle {
 class Neuron extends Module with CurrentCycle {
   val io = IO(new NeuronIO)
 
-  io.out.valid := false.B
-  io.out.bits := DontCare
+  val sum = RegInit(0.U(Config.dataWidth.W))
 
-  when(io.in.valid) {
-    io.out.valid := true.B
-    io.out.bits := 3.U
+  when(io.in.valid){
+    sum := sum + io.weight.bits * io.in.bits
   }
+
+  io.out := sum
 
   when(io.in.valid) {
     printf(p"[$currentCycle NeuralNetwork] io.in.bits = ${io.in.bits}\n")

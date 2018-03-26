@@ -23,6 +23,17 @@ class Layer(val numAxons: Int, val numNeurons: Int) extends Module {
   io.in.ready := false.B
 
   val neurons = VecInit(Seq.fill(numNeurons)(Module(new Neuron).io))
+
+  neurons.foreach { neuron =>
+    neuron.in.valid := false.B
+    neuron.weight.valid := false.B
+
+    neuron.in.bits := 0.Fixed
+    neuron.weight.bits := 0.Fixed
+
+    neuron.out.ready := false.B
+  }
+
   val mem = Mem(numAxons * numNeurons, Fixed)
 
   val s_idle :: s_busy :: s_done :: Nil = Enum(3)

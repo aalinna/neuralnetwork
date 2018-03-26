@@ -23,14 +23,15 @@ class Neuron extends Module with CurrentCycle {
     sum := sum + io.weight.bits * io.in.bits
   }
 
-  io.out := sum
+  io.out.valid := true.B
+  io.out.bits := sum
 
   when(io.in.valid) {
-    printf(p"[$currentCycle NeuralNetwork] io.in.bits = ${io.in.bits}\n")
+//    printf(p"[$currentCycle NeuralNetwork] io.in.bits = ${io.in.bits}\n")
   }
 
   when(io.out.valid) {
-    printf(p"[$currentCycle NeuralNetwork] io.out.bits = ${io.out.bits}\n")
+//    printf(p"[$currentCycle NeuralNetwork] io.out.bits = ${io.out.bits}\n")
   }
 }
 

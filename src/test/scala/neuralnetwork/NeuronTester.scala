@@ -15,7 +15,7 @@ class NeuronTester(neuron: Neuron) extends PeekPokeTester(neuron) {
     step(1)
   }
 
-  printf(s"[$t NeuralNetworkTester] neuralnetwork.io.out.bits = ${peek(neuron.io.out.bits)}\n")
+//  printf(s"[$t NeuronTester] neuron.io.out.bits = ${peek(neuron.io.out.bits)}\n")
 
   step(1)
 }

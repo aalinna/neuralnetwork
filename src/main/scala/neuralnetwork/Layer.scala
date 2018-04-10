@@ -6,41 +6,41 @@ import chisel3.core.FixedPoint
 import chisel3.util._
 import chisel3.core.VecInit
 
-class Weight extends Bundle {
+class Weight extends Bundle {  //定义权重
   val axon = UInt(32.W)
   val neuron = UInt(32.W)
   val weight = Fixed
 }
 
-class LayerDataIn extends Bundle {
+class LayerDataIn extends Bundle { //定义层数据输入
   val axon = UInt(32.W)
   val in = Fixed
 }
 
-class LayerDataOut extends Bundle {
+class LayerDataOut extends Bundle {//定义层数据输出
   val neuron = UInt(32.W)
   val out = Fixed
 }
 
-class LayerIO extends Bundle {
+class LayerIO extends Bundle {     //定义层输入输出
   val weight = Flipped(Decoupled(new Weight))
   val in = Flipped(Decoupled(new LayerDataIn))
   val out = Decoupled(new LayerDataOut)
 }
 
-class Layer(val numAxons: Int, val numNeurons: Int) extends Module {
+class Layer(val numAxons: Int, val numNeurons: Int) extends Module {   //定义层
   val io = IO(new LayerIO)
 
   val weights = Mem(numAxons * numNeurons, Fixed)
 
   val neurons = VecInit(Seq.fill(numNeurons)(Module(new Neuron(numAxons)).io))
 
-  val s_idle :: s_weightBusy :: s_weightDone :: s_accumulateBusy :: s_accumulateDone :: Nil = Enum(5)
-  val state = RegInit(s_idle)
+  val s_idle :: s_weightBusy :: s_weightDone :: s_accumulateBusy :: s_accumulateDone :: Nil = Enum(5)  //定义层状态
+  val state = RegInit(s_idle)   //当前状态sate
 
-  val counterNeuron = new Counter(numNeurons)
+  val counterNeuron = new Counter(numNeurons)  //计数器
 
-  switch(state) {
+  switch(state) {  //层状态转换
     is(s_idle) {
       when(io.weight.valid) {
         weights.write(0.U, io.weight.bits.weight)

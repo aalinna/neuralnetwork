@@ -5,6 +5,6 @@ import chisel3.core.FixedPoint
 import chisel3.util._
 
 object Config {
-  val fixedPointWidth:Int = 24
-  val fixedPointBinaryPoint:Int = 8
+  val fixedPointWidth: Int = 24
+  val fixedPointBinaryPoint: Int = 8
 }

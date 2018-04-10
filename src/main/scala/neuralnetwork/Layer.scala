@@ -1,54 +1,30 @@
 package neuralnetwork
 
-import chisel3.Bundle
 import chisel3._
-import chisel3.core.FixedPoint
 import chisel3.util._
 import chisel3.core.VecInit
 
-class Weight extends Bundle {  //定义权重
-  val axon = UInt(32.W)
-  val neuron = UInt(32.W)
-  val weight = UInt(32.W)
-}
-
-class LayerDataIn extends Bundle { //定义层数据输入
-  val axon = UInt(32.W)
-  val in = UInt(32.W)
-}
-
-class LayerDataOut extends Bundle {//定义层数据输出
-  val neuron = UInt(32.W)
-  val out = UInt(32.W)
-}
-
-class LayerIO extends Bundle {     //定义层输入输出
-  val weight = Flipped(Decoupled(new Weight))
-  val in = Flipped(Decoupled(new LayerDataIn))
-  val out = Decoupled(new LayerDataOut)
-}
-
-class Layer(val numAxons: Int, val numNeurons: Int) extends Module {   //定义层
+class Layer(val numAxons: Int, val numNeurons: Int) extends Module with CurrentCycle { //定义层
   val io = IO(new LayerIO)
 
   val weights = Mem(numAxons * numNeurons, UInt(32.W))
 
   val neurons = VecInit(Seq.fill(numNeurons)(Module(new Neuron(numAxons)).io))
 
-  val s_idle :: s_weightBusy :: s_weightDone :: s_accumulateBusy :: s_accumulateDone :: Nil = Enum(5)  //定义层状态
-  val state = RegInit(s_idle)   //当前状态sate
+  val s_idle :: s_weightBusy :: s_weightDone :: s_accumulateBusy :: s_accumulateDone :: Nil = Enum(5) //定义层状态
+  val state = RegInit(s_idle) //当前状态sate
 
-  val counterNeuron = new Counter(numNeurons)  //计数器
+  val counterNeuron = new Counter(numNeurons) //计数器
 
-  switch(state) {  //层状态转换
+  switch(state) { //层状态转换
     is(s_idle) {
-      when(io.weight.valid) {
+      when(io.weight.fire()) {
         weights.write(0.U, io.weight.bits.weight)
         state := s_weightBusy
       }
     }
     is(s_weightBusy) {
-      when(io.weight.valid) {
+      when(io.weight.fire()) {
         weights.write(numAxons.U * io.weight.bits.neuron + io.weight.bits.axon, io.weight.bits.weight)
         state := s_weightBusy
       }
@@ -57,7 +33,7 @@ class Layer(val numAxons: Int, val numNeurons: Int) extends Module {   //定义�
       }
     }
     is(s_weightDone) {
-      when(io.in.valid) {
+      when(io.in.fire()) {
         state := s_accumulateBusy
       }
     }
@@ -67,17 +43,17 @@ class Layer(val numAxons: Int, val numNeurons: Int) extends Module {   //定义�
       }
     }
     is(s_accumulateDone) {
-      when(io.out.valid){
+      when(io.out.fire()) {
         counterNeuron.inc()
       }
 
-      when(counterNeuron.value === (numNeurons - 1).U ){
+      when(counterNeuron.value === (numNeurons - 1).U) {
         state := s_weightDone
       }
     }
   }
 
-  neurons.zipWithIndex.foreach { case(neuron, i) =>
+  neurons.zipWithIndex.foreach { case (neuron, i) =>
     neuron.in.valid := io.in.valid
     neuron.in.bits.axon := io.in.bits.axon
     neuron.in.bits.weight := weights.read(numAxons.U * i.U + io.in.bits.axon)
@@ -93,4 +69,16 @@ class Layer(val numAxons: Int, val numNeurons: Int) extends Module {   //定义�
 
   io.weight.ready := state === s_idle || state === s_weightBusy
   io.in.ready := state =/= s_idle && state =/= s_weightBusy
+
+  when(io.weight.fire()) {
+    printf(p"[$currentCycle Layer] state: $state, weight: ${io.weight.bits}\n")
+  }
+
+  when(io.in.fire()) {
+    printf(p"[$currentCycle Layer] state: $state, in: ${io.in.bits}\n")
+  }
+
+  when(io.out.fire()) {
+    printf(p"[$currentCycle Layer] state: $state, out: ${io.out.bits}\n")
+  }
 }

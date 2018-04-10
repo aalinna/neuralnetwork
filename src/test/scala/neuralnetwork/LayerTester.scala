@@ -1,25 +1,47 @@
 package neuralnetwork
 
-import chisel3.UInt
-import chisel3._
-import chisel3.core.FixedPoint
 import chisel3.iotesters.PeekPokeTester
-import org.scalatest.{FlatSpec, Matchers}
-
-import scala.util.Random
 
 class LayerTester(layer: Layer) extends PeekPokeTester(layer) {
-  /*todo,  wiki  ，github   extends PeekPokeTester 这怎么输入输出    ， pdf
-   */
-  /* //测试random
-   val min = UInt(32.W)
-    val max = UInt(32.W)
-    val a = (new Random).nextInt(99)//
-    printf(p"[$a = ${a}\n")
-    */
-  //LayerDataIn.in.foreach(new Random())      //初始化datain
+  poke(layer.io.in.valid, false)
 
-  //numAxons
+  (0 until layer.numNeurons).foreach { neuron =>
+    (0 until layer.numAxons).foreach { axon =>
+      poke(layer.io.weight.valid, true)
+      poke(layer.io.weight.bits.axon, axon)
+      poke(layer.io.weight.bits.neuron, neuron)
+      poke(layer.io.weight.bits.weight, 2)
+
+      step(1)
+    }
+  }
+
+  poke(layer.io.weight.valid, false)
+
+  (0 until layer.numAxons).foreach { axon =>
+    poke(layer.io.in.valid, true)
+    poke(layer.io.in.bits.axon, axon)
+    poke(layer.io.in.bits.in, 2)
+
+    step(1)
+  }
+
+  poke(layer.io.in.valid, false)
+  poke(layer.io.out.ready, true)
+
+  (0 until layer.numNeurons).foreach { _ =>
+    val valid = peek(layer.io.out.valid)
+    val ready = peek(layer.io.out.ready)
+    val neuron = peek(layer.io.out.bits.neuron)
+    val out = peek(layer.io.out.bits.out)
+    printf(s"[$t LayerTester] valid: $valid, ready: $ready, neuron: $neuron, out: $out\n")
+
+    step(1)
+  }
+
+  poke(layer.io.out.ready, false)
+
+  step(1)
 }
 
 object LayerTester extends App {

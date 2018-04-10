@@ -11,10 +11,10 @@ class NeuronTester(neuron: Neuron) extends PeekPokeTester(neuron) {
   val weight = 2
   val in = 2
 
-  (0 until neuron.numAxons).foreach { i =>
+  (0 until neuron.numAxons).foreach { axon =>
     poke(neuron.io.in.valid, true)
 
-    poke(neuron.io.in.bits.axon, i)
+    poke(neuron.io.in.bits.axon, axon)
     poke(neuron.io.in.bits.weight, weight)
     poke(neuron.io.in.bits.in, in)
 

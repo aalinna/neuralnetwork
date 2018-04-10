@@ -20,8 +20,6 @@ class NeuronTester(neuron: Neuron) extends PeekPokeTester(neuron) {
   step(1)
 }
 
-class NeuronSpec extends FlatSpec with Matchers {
-  it should "run excellently" in {
-    chisel3.iotesters.Driver(() => new Neuron(5)) { neuron => new NeuronTester(neuron) } should be(true)
-  }
+object NeuronTester extends App {
+    chisel3.iotesters.Driver(() => new Neuron(5)) { neuron => new NeuronTester(neuron) }
 }

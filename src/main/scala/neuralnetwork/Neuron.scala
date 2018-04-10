@@ -52,7 +52,7 @@ class Neuron(val numAxons: Int) extends Module with CurrentCycle {  //定义神�
   io.in.ready := true.B
 
   io.out.valid := state === s_done
-  io.out.bits := sum
+  io.out.bits.out := sum
 
   when(io.in.valid) {
     //    printf(p"[$currentCycle NeuralNetwork] io.in.bits = ${io.in.bits}\n")

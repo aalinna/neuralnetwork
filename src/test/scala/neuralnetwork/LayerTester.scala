@@ -8,9 +8,9 @@ import org.scalatest.{FlatSpec, Matchers}
 
 import scala.util.Random
 
-class LayerTester(layer: Layer)extends PeekPokeTester(layer){
-/*todo,  wiki  ，github   extends PeekPokeTester 这怎么输入输出    ， pdf
- */
+class LayerTester(layer: Layer) extends PeekPokeTester(layer) {
+  /*todo,  wiki  ，github   extends PeekPokeTester 这怎么输入输出    ， pdf
+   */
   /* //测试random
    val min = UInt(32.W)
     val max = UInt(32.W)
@@ -22,8 +22,6 @@ class LayerTester(layer: Layer)extends PeekPokeTester(layer){
   //numAxons
 }
 
-class LayerSpec extends FlatSpec with Matchers {
-  it should "run excellently" in {
-    chisel3.iotesters.Driver(() => new Layer(5,7)) { layer => new LayerTester(layer) } should be(true)
-  }
+object LayerTester extends App {
+  chisel3.iotesters.Driver(() => new Layer(5, 7)) { layer => new LayerTester(layer) }
 }

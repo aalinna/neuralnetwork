@@ -6,12 +6,12 @@ import chisel3.util._
 
 class NeuronDataIn extends Bundle {  //数据输入
   val axon = UInt(32.W)
-  val weight = Fixed
-  val in = Fixed
+  val weight = UInt(32.W)
+  val in = UInt(32.W)
 }
 
 class NeuronDataOut extends Bundle {   //数据输出
-  val out = Fixed
+  val out = UInt(32.W)
 }
 
 class NeuronIO extends Bundle {   //输入输出
@@ -23,9 +23,9 @@ class Neuron(val numAxons: Int) extends Module with CurrentCycle {  //定义神�
   val io = IO(new NeuronIO)
 
   val s_idle :: s_busy :: s_done :: Nil = Enum(3)  //定义神经元状态：空闲、忙、已完成
-  val state = RegInit(s_idle)  //当前状态sate
+  val state = RegInit(s_idle)  //当前状态state
 
-  val sum = RegInit(0.Fixed)
+  val sum = Reg(UInt())
 
   switch(state) {   //各状态下任务及状态转换
     is(s_idle) {

@@ -9,17 +9,17 @@ import chisel3.core.VecInit
 class Weight extends Bundle {  //定义权重
   val axon = UInt(32.W)
   val neuron = UInt(32.W)
-  val weight = Fixed
+  val weight = UInt(32.W)
 }
 
 class LayerDataIn extends Bundle { //定义层数据输入
   val axon = UInt(32.W)
-  val in = Fixed
+  val in = UInt(32.W)
 }
 
 class LayerDataOut extends Bundle {//定义层数据输出
   val neuron = UInt(32.W)
-  val out = Fixed
+  val out = UInt(32.W)
 }
 
 class LayerIO extends Bundle {     //定义层输入输出
@@ -31,7 +31,7 @@ class LayerIO extends Bundle {     //定义层输入输出
 class Layer(val numAxons: Int, val numNeurons: Int) extends Module {   //定义层
   val io = IO(new LayerIO)
 
-  val weights = Mem(numAxons * numNeurons, Fixed)
+  val weights = Mem(numAxons * numNeurons, UInt(32.W))
 
   val neurons = VecInit(Seq.fill(numNeurons)(Module(new Neuron(numAxons)).io))
 

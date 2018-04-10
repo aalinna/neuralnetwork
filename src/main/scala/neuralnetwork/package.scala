@@ -9,5 +9,4 @@ package object neuralnetwork {
   implicit class fromDoubleToNeuralLiteral(val d: Double) {
     def Fixed = d.F(Config.fixedPointWidth.W, Config.fixedPointBinaryPoint.BP)
   }
-
 }

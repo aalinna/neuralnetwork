@@ -49,5 +49,5 @@ class Neuron(val numAxons: Int) extends Module with CurrentCycle { //定义神�
 }
 
 object Neuron extends App {
-  Driver.execute(Array("-td", "source/"), () => new Neuron(10))
+  Driver.execute(Array("-td", "source/"), () => new Neuron(7))
 }

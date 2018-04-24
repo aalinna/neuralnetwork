@@ -1,0 +1,5 @@
+package neuralnetwork
+
+object MNIST {
+
+}

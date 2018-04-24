@@ -2,8 +2,8 @@ clear; clc; close all; format compact
 
 disp('Loading data..')
 
-mnist_train_data = csvread('data/mnist_train.csv');
-mnist_test_data = csvread('data/mnist_test.csv');
+mnist_train_data = csvread('../../../data/mnist_train.csv');
+mnist_test_data = csvread('../../../data/mnist_test.csv');
 
 %%
 num_inputs = 784;

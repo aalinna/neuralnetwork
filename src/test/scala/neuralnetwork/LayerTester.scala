@@ -30,19 +30,19 @@ class LayerTester(layer: Layer) extends PeekPokeTester(layer) {
     step(1)
   }
 
+  poke(layer.io.in.valid, false)
+
   (0 until layer.numNeurons).foreach { neuron =>
     poke(layer.io.out.ready, true)
   }
 
   (0 until layer.numNeurons).foreach { neuron =>
-    val neuron = peek(layer.io.out.bits.neuron)
-    val out = peek(layer.io.out.bits.out)
-
     while (peek(layer.io.out.valid) == BigInt(0)) {
-      printf(s"[$t LayerTester] OutValid_Error, neuron: $neuron\n")
-
       step(1)
     }
+
+    val neuron = peek(layer.io.out.bits.neuron)
+    val out = peek(layer.io.out.bits.out)
 
     printf(s"[$t LayerTester] neuron: $neuron, out: $out\n")
 
@@ -50,7 +50,6 @@ class LayerTester(layer: Layer) extends PeekPokeTester(layer) {
   }
 
     (0 until layer.numNeurons).foreach { neuron =>
-//      poke(layer.io.out.valid, false)
       poke(layer.io.out.ready,false)
   }
 

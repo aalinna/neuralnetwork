@@ -9,7 +9,7 @@ class Layer(val numAxons: Int, val numNeurons: Int) extends Module with CurrentC
 
   val weights = Mem(numAxons * numNeurons, UInt(32.W))
 
-  val neurons = VecInit(Seq.fill(numNeurons)(Module(new Neuron(numAxons)).io))
+  val neurons = VecInit(Seq.tabulate(numNeurons)(num => Module(new Neuron(numAxons, num)).io))
 
   val s_idle :: s_weightBusy :: s_weightDone :: s_accumulateBusy :: s_accumulateDone :: Nil = Enum(5) //定义层状态
   val state = RegInit(s_idle) //当前状态sate

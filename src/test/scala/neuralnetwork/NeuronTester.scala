@@ -35,5 +35,5 @@ class NeuronTester(neuron: Neuron) extends PeekPokeTester(neuron) {
 }
 
 object NeuronTester extends App {
-    chisel3.iotesters.Driver(() => new Neuron(7)) { neuron => new NeuronTester(neuron) }
+    chisel3.iotesters.Driver(() => new Neuron(7,0)) { neuron => new NeuronTester(neuron) }
 }

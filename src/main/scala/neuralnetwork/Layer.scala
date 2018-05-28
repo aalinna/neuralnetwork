@@ -38,7 +38,7 @@ class Layer(val numAxons: Int, val numNeurons: Int) extends Module with CurrentC
       }
     }
     is(s_accumulateBusy) {
-      when(io.in.bits.axon === (numAxons - 1).U) {
+      when(io.in.bits.index === (numAxons - 1).U) {
         state := s_accumulateDone
       }
     }
@@ -55,16 +55,16 @@ class Layer(val numAxons: Int, val numNeurons: Int) extends Module with CurrentC
 
   neurons.zipWithIndex.foreach { case (neuron, i) =>
     neuron.in.valid := io.in.valid
-    neuron.in.bits.axon := io.in.bits.axon
-    neuron.in.bits.weight := weights.read(numAxons.U * i.U + io.in.bits.axon)
-    neuron.in.bits.in := io.in.bits.in
+    neuron.in.bits.axon := io.in.bits.index
+    neuron.in.bits.weight := weights.read(numAxons.U * i.U + io.in.bits.index)
+    neuron.in.bits.in := io.in.bits.data
 
     neuron.out.ready := false.B
   }
 
   io.out.valid := neurons(counterNeuron.value).out.valid
-  io.out.bits.neuron := counterNeuron.value
-  io.out.bits.out := neurons(counterNeuron.value).out.bits.out
+  io.out.bits.index := counterNeuron.value
+  io.out.bits.data := neurons(counterNeuron.value).out.bits.data
   neurons(counterNeuron.value).out.ready := io.out.ready
 
   io.weight.ready := state === s_idle || state === s_weightBusy

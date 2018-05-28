@@ -29,7 +29,7 @@ class NeuronTester(neuron: Neuron) extends PeekPokeTester(neuron) {
     step(1)
   }
 
-  expect(neuron.io.out.bits.out, weight * in * neuron.numAxons)
+  expect(neuron.io.out.bits.data, weight * in * neuron.numAxons)
 
   step(1)
 }

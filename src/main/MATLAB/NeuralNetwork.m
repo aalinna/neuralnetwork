@@ -14,11 +14,11 @@ classdef NeuralNetwork < handle
     end
     
     methods
-        % Initialize the neural network.åˆå§‹åŒ–ç¥žç»ç½‘ç»œ
+        % Initialize the neural network.³õÊ¼»¯Éñ¾­ÍøÂç
         function self = NeuralNetwork(num_inputs, num_hidden, num_outputs, learning_rate)
-            self.num_inputs = num_inputs;   %å®šä¹‰è¾“å…¥å±‚æ•°ç›®
-            self.num_hidden = num_hidden;   %å®šä¹‰éšè—å±‚æ•°ç›®
-            self.num_outputs = num_outputs; %å®šä¹‰è¾“å‡ºå±‚æ•°ç›®
+            self.num_inputs = num_inputs;   %¶¨ÒåÊäÈë²ãÊýÄ¿
+            self.num_hidden = num_hidden;   %¶¨ÒåÒþ²Ø²ãÊýÄ¿
+            self.num_outputs = num_outputs; %¶¨ÒåÊä³ö²ãÊýÄ¿
             
             self.learning_rate = learning_rate;
             
@@ -28,16 +28,16 @@ classdef NeuralNetwork < handle
             self.weights_hidden_outputs = normrnd(0.0, power(self.num_outputs, -0.5), self.num_outputs, self.num_hidden);
         end
         
-        % Train the neural network.è®­ç»ƒç¥žç»ç½‘ç»œ
+        % Train the neural network.ÑµÁ·Éñ¾­ÍøÂç
         function train(self, inputs, targets)
             inputs = inputs';
             targets = targets';
             
-            hidden_in = self.weights_inputs_hidden * inputs;   %è®¡ç®—è¾“å…¥å±‚è¾“å‡ºä½œä¸ºéšè—å±‚çš„è¾“å…¥
-            hidden_out = self.activation_function(hidden_in);  %è®¡ç®—ç»“æžœèµ‹ç»™è¾“å‡º
+            hidden_in = self.weights_inputs_hidden * inputs;   %¼ÆËãÊäÈë²ãÊä³ö×÷ÎªÒþ²Ø²ãµÄÊäÈë
+            hidden_out = self.activation_function(hidden_in);  %¼ÆËã½á¹û¸³¸øÊä³ö
             
-            outputs_in = self.weights_hidden_outputs * hidden_out;  %è®¡ç®—éšè—å±‚è¾“å‡ºä½œä¸ºè¾“å…¥å±‚çš„è¾“å…¥
-            outputs_out = self.activation_function(outputs_in);     %è®¡ç®—ç»“æžœå¹¶èµ‹ç»™è¾“å‡º
+            outputs_in = self.weights_hidden_outputs * hidden_out;  %¼ÆËãÒþ²Ø²ãÊä³ö×÷ÎªÊäÈë²ãµÄÊäÈë
+            outputs_out = self.activation_function(outputs_in);     %¼ÆËã½á¹û²¢¸³¸øÊä³ö
             
             outputs_errors = targets - outputs_out;
             hidden_errors = self.weights_hidden_outputs' * outputs_errors;
@@ -46,7 +46,7 @@ classdef NeuralNetwork < handle
             self.weights_inputs_hidden = self.weights_inputs_hidden + self.learning_rate .* hidden_errors .* hidden_out .* (1 - hidden_out) * inputs';
         end
         
-        % Test the neural network.æµ‹è¯•ç¥žç»ç½‘ç»œ
+        % Test the neural network.²âÊÔÉñ¾­ÍøÂç
         function outputs_out = test(self, inputs)
             inputs = inputs';
             
@@ -58,6 +58,13 @@ classdef NeuralNetwork < handle
             
             outputs_out = outputs_out';
         end
+        
+        % save weights
+        function  save_weights(self)
+            csvwrite('../../../data/weights_InputToHidden.csv',self.weights_inputs_hidden);
+            csvwrite('../../../data/weights_HiddenToOutput.csv',self.weights_hidden_outputs);
+        end
     end
+
 end
 

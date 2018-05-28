@@ -24,8 +24,8 @@ class Neuron(val numAxons: Int, val num: Int) extends Module with CurrentCycle {
         sum := sum + io.in.bits.weight * io.in.bits.in //”忙“状态下持续做计算
         when(io.in.bits.axon === (numAxons - 1).U) {
           state := s_done //计算最后一个突触后状态转为“ 完成”
-        }
       }
+    }
     }
     is(s_done) {
       when(io.out.fire()) {
@@ -37,7 +37,7 @@ class Neuron(val numAxons: Int, val num: Int) extends Module with CurrentCycle {
   io.in.ready := true.B
 
   io.out.valid := state === s_done
-  io.out.bits.out := sum
+  io.out.bits.data := sum
 
   when(io.in.fire()) {
     printf(p"[$currentCycle Neuron#$num] in: ${io.in.bits}\n")

@@ -16,11 +16,7 @@ class LayerTester(layer: Layer) extends PeekPokeTester(layer) {
     }
   }
 
-  (0 until layer.numNeurons).foreach { neuron =>
-    (0 until layer.numAxons).foreach { axon =>
-      poke(layer.io.weight.valid, false)
-    }
-  }
+  poke(layer.io.weight.valid, false)
 
   (0 until layer.numAxons).foreach { axon =>
     poke(layer.io.in.valid, true)
@@ -32,9 +28,7 @@ class LayerTester(layer: Layer) extends PeekPokeTester(layer) {
 
   poke(layer.io.in.valid, false)
 
-  (0 until layer.numNeurons).foreach { neuron =>
-    poke(layer.io.out.ready, true)
-  }
+  poke(layer.io.out.ready, true)
 
   (0 until layer.numNeurons).foreach { neuron =>
     while (peek(layer.io.out.valid) == BigInt(0)) {

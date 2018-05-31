@@ -4,7 +4,7 @@ import chisel3._
 import chisel3.util._
 import chisel3.core.VecInit
 
-class Layer(val numAxons: Int, val numNeurons: Int) extends Module with CurrentCycle { //定义层
+class Layer(val id: Int, val numAxons: Int, val numNeurons: Int) extends Module with CurrentCycle { //定义层
   val io = IO(new LayerIO)
 
   val weights = Mem(numAxons * numNeurons, UInt(32.W))
@@ -71,14 +71,14 @@ class Layer(val numAxons: Int, val numNeurons: Int) extends Module with CurrentC
   io.in.ready := state =/= s_idle && state =/= s_weightBusy
 
   when(io.weight.fire()) {
-    printf(p"[$currentCycle Layer] state: $state, weight: ${io.weight.bits}\n")
+    printf(p"[$currentCycle Layer#$id] state: $state, weight: ${io.weight.bits}\n")
   }
 
   when(io.in.fire()) {
-    printf(p"[$currentCycle Layer] state: $state, in: ${io.in.bits}\n")
+    printf(p"[$currentCycle Layer#$id] state: $state, in: ${io.in.bits}\n")
   }
 
   when(io.out.fire()) {
-    printf(p"[$currentCycle Layer] state: $state, out: ${io.out.bits}\n")
+    printf(p"[$currentCycle Layer#$id] state: $state, out: ${io.out.bits}\n")
   }
 }

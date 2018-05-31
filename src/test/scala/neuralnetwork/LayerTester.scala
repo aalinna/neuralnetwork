@@ -57,5 +57,5 @@ class LayerTester(layer: Layer) extends PeekPokeTester(layer) {
 }
 
 object LayerTester extends App {
-  chisel3.iotesters.Driver(() => new Layer(5, 7)) { layer => new LayerTester(layer) }
+  chisel3.iotesters.Driver(() => new Layer(0, 5, 7)) { layer => new LayerTester(layer) }
 }

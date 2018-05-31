@@ -16,9 +16,9 @@ classdef NeuralNetwork < handle
     methods
         % Initialize the neural network.初始化神经网络
         function self = NeuralNetwork(num_inputs, num_hidden, num_outputs, learning_rate)
-            self.num_inputs = num_inputs;   %定义输入层数目
-            self.num_hidden = num_hidden;   %定义隐藏层数目
-            self.num_outputs = num_outputs; %定义输出层数目
+            self.num_inputs = num_inputs;   %初始化输入层神经元数目
+            self.num_hidden = num_hidden;   %初始化隐藏层神经元数目
+            self.num_outputs = num_outputs; %初始化输出层神经元数目
             
             self.learning_rate = learning_rate;
             

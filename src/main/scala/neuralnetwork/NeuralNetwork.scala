@@ -7,8 +7,8 @@ import chisel3.core.VecInit
 class NeuralNetwork() extends Module with CurrentCycle {
   val io = IO(new NeuralNetworkIO)
 
-  val layer0 = Module(new Layer(MNIST.num_inputs, MNIST.num_hidden))
-  val layer1 = Module(new Layer(MNIST.num_hidden, MNIST.num_outputs))
+  private val layer0 = Module(new Layer(0, MNIST.num_inputs, MNIST.num_hidden))
+  private val layer1 = Module(new Layer(1, MNIST.num_hidden, MNIST.num_outputs))
 
   io.weight(0) <> layer0.io.weight
   io.weight(1) <> layer1.io.weight
@@ -16,8 +16,6 @@ class NeuralNetwork() extends Module with CurrentCycle {
   io.in <> layer0.io.in
   layer0.io.out <> layer1.io.in
   layer1.io.out <> io.out
-
-
 }
 
 object NeuralNetwork extends App {

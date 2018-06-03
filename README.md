@@ -13,7 +13,7 @@ Multi-layer perceptron.
 
 论文：0604必交
 下载毕设论文参考；相关参考文献
-
+画图：Visio   lucidchart（主要参数，接口，端口之间的连线，端口的数据类型（位））
 
 
 

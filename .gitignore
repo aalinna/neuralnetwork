@@ -1,5 +1,6 @@
 .idea/
 source/
+target/
 test_run_dir/
 data/mnist_test.csv
 data/mnist_train.csv

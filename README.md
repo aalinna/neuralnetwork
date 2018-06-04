@@ -17,7 +17,8 @@ Multi-layer perceptron.
 小黄本参考学姐的叙事
   Bits：  FixedPoint描述数据
  Mem 58页  存储 ROM  存正弦函数的方法存sigmoid
-github 简单例子  Verilog  lookup table  sin sigmiod  看懂代码   组合电路实现查找表  DynamicMemorySearch   chisel怎么描述组合电路，有何优势，函数调用
+github 简单例子  Verilog  lookup table  sin sigmiod  看懂代码
+组合电路实现查找表  DynamicMemorySearch   chisel怎么描述组合电路，有何优势，函数调用
 zip; map ;reduce 函数  写
 
 
